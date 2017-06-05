@@ -1,0 +1,25 @@
+login(userInfo) {
+     let url = `${this.url}/login`;
+     let iJon = JSON.stringify(userInfo);
+     let usuario = [];
+
+     return this.http.post(url, iJon, {
+        headers: new Headers({
+           'Content-Type':'application/json'
+        })
+     })
+     .map(resposta => resposta.json())
+     .map(resposta => {
+        if (resposta=="error" || resposta=="nofound"){
+           this.loggedIn = false;
+        } else {
+            this.storage.set('resultado', resposta);
+
+            this.email = userInfo.email;
+            //console.log('teste2: '+JSON.stringify(userInfo));
+            this.loggedIn = true;
+
+        }
+        return this.loggedIn;
+     });
+  }
