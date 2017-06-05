@@ -1,0 +1,31 @@
+// Função Login
+  this.login = function(dados, resposta) {
+      conexao.obter(function(er, cn) {
+         cn.query('select * from usuario where email=? and senha=? ',[dados.email, dados.senha], function(error, resultado) {
+            cn.release();
+            if (error) {
+               resposta.send('Error');
+            } else {
+               if (resultado.length == 0) {
+                  console.log('Usuário não encontrado !');
+                  resposta.send('nofound');
+               } else {
+                /*  var token = jwt.sign({
+                   user: dados.nome,
+                     nivel: dados.nivel,
+                     rol: 'admin'
+                  },'token',{expiresIn: '120s'});*/
+                  resposta.send(resultado);
+                  console.log(resultado);
+               }
+            }
+         })
+      })
+   }
+   
+   
+   
+       // Rota do Login
+    app.post('/auth/login/',function(solicitacao, resposta){
+       db.login(solicitacao.body, resposta);
+    })
